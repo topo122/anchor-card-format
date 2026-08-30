@@ -1,0 +1,12 @@
+{
+  "card": null,
+  "diagnostics": [
+    {
+      "column": 5,
+      "line": 2,
+      "path": "011-id-invalid-fires.md",
+      "rule": "id-invalid",
+      "severity": "error"
+    }
+  ]
+}

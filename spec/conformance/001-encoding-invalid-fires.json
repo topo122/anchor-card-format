@@ -1,0 +1,12 @@
+{
+  "card": null,
+  "diagnostics": [
+    {
+      "column": 1,
+      "line": 1,
+      "path": "001-encoding-invalid-fires.md",
+      "rule": "encoding-invalid",
+      "severity": "error"
+    }
+  ]
+}

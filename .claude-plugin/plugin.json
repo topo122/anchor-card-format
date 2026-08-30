@@ -1,0 +1,16 @@
+{
+  "name": "anchor",
+  "description": "Write and repair Anchor Card Format v2 flashcards: one Markdown file per card, in your own Git repo. Adds a card-authoring skill, a command that mints a new card, a command that acts on review feedback pasted in from a study app, and a hook that lints every card file after it is written.",
+  "version": "0.1.0",
+  "author": {
+    "name": "topo122"
+  },
+  "homepage": "https://github.com/topo122/anchor-card-format",
+  "keywords": [
+    "anchor",
+    "flashcards",
+    "spaced-repetition",
+    "markdown",
+    "lint"
+  ]
+}

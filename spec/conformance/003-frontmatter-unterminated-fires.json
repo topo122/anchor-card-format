@@ -1,0 +1,12 @@
+{
+  "card": null,
+  "diagnostics": [
+    {
+      "column": 1,
+      "line": 1,
+      "path": "003-frontmatter-unterminated-fires.md",
+      "rule": "frontmatter-unterminated",
+      "severity": "error"
+    }
+  ]
+}

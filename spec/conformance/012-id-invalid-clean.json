@@ -1,0 +1,16 @@
+{
+  "card": {
+    "ask": true,
+    "back": "A.",
+    "deck": [],
+    "extra": {},
+    "id": "abc",
+    "items": [
+      "abc"
+    ],
+    "reverse": false,
+    "tags": [],
+    "title": "T"
+  },
+  "diagnostics": []
+}

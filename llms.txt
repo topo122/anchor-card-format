@@ -1,0 +1,146 @@
+# Anchor Card Format v2 — compressed reference for AI writers and implementers
+
+Canon: **SPEC.md, and only SPEC.md.** This file compresses it and is never authoritative: if the two
+disagree, SPEC.md is right and this file has a bug. `spec/conformance/` is a machine-checkable corpus
+derived from SPEC.md — a gate, not a second spec.
+
+## The whole format in one card
+
+```
+---
+id: 01JD8N2K4P7QW3ZR5T9V6X0YAB
+tags: [inference]
+---
+
+# Ubiquitous
+
+Used in what register?
+
+<!-- hint -->
+Latin *ubique*.
+
+<!-- back -->
+Present or found everywhere.
+
+<!-- note -->
+Seen in exam prose.
+```
+
+## Writing a card — the ten rules that matter
+
+1. One file = one card. `.md`, lowercase extension. No path segment may start with `_` or `.`.
+2. A file is a card if and only if its frontmatter has `id`. Everything else is skipped silently.
+3. `id` SHOULD be a fresh ULID (26 chars) or UUIDv7; a meaningful slug is legal too. NEVER change an id and NEVER reuse the id of a deleted card: it is the only key to review history.
+4. Put the file at `<deck>/<deck>/<id>.md`. **There is no `deck:` key** — the directory path is the deck, and nothing overrides it.
+5. First non-blank line after frontmatter MUST be `# Title` (ATX, column 0, one space). No setext.
+6. `<!-- back -->` is required unless `ask: false`.
+7. Markers are byte-exact whole lines: `<!-- hint -->`, `<!-- back -->`, `<!-- note -->` — exactly three, nothing else. Order hint → back → note. Each at most once. `<!--back-->`, `<!-- Back -->`, trailing space = error.
+8. Title is shown on BOTH sides. Never put the answer in the title — no exception: the title is hidden only on the front of a reversed item (`#r`), and that same card's forward item still shows it.
+9. Front may be empty: title alone is a valid question (vocabulary/term cards). This is normal, not a warning.
+10. To reuse text — or to write an enumeration — use one question per card plus an `ask: false` card referenced with `![[id]]` alone on its own line.
+
+## Frontmatter — a fixed subset, NOT YAML
+
+Starts at byte 0 with exactly `---`, ends at the next exactly-`---` line. `...` and `----` are not delimiters. No terminator = error.
+Allowed lines only: blank; `# comment`; `key: value`; `key:` + `  - item` lines (exactly 2 spaces); `key: [a, b]`.
+Values are ALWAYS strings — no type inference (`011`, `2026-08-31`, `no` stay strings). Matching outer `"`/`'` pair is stripped; no escape processing.
+Block scalars `|` `>`, anchors `&` `*`, merge `<<`, nested maps, tab indent, duplicate keys = error. Never silently ignored.
+
+Keys: `id` (required) · `tags` · `ask` · `reverse` · `format` · anything else preserved in `extra` and ignored (`x-` reserved for agents; unknown keys are frozen as ignore-forever).
+
+- `id`: `[A-Za-z0-9][A-Za-z0-9_-]{2,63}`, whole-string, case-sensitive, ASCII. `#` reserved for derived items. Duplicate id = ALL those cards error out.
+- `tags`: any non-empty Unicode strings, no `,`. Order kept, duplicates warn. `tags: foo` (scalar) = error.
+- `ask`: `true`/`false` literally, nothing else. `false` = never scheduled, exists only as a `![[id]]` target. NOT a pause switch — pausing is a log event.
+- `reverse`: `true` adds one reversed item.
+- `format`: if present MUST be `2`. Anything v2 cannot express arrives under a higher number, never as an extension of v2.
+
+**Deck** is derived, not declared: the card's directory path split on `/`, NFC-normalized, case-sensitive (`Stats` ≠ `stats`). Root card = empty deck (legal). A key named `deck` is just an unknown key and means nothing. Move the file to change the deck.
+
+## Regions
+
+front = after title → first of hint/back/EOF · hint = after `<!-- hint -->` → back/EOF · back = after `<!-- back -->` → note/EOF · note = after `<!-- note -->` → EOF.
+Marker lines belong to no region. Each region is stripped of leading/trailing blank lines; interior blank lines kept. Missing region = absent (never null, never ""). Empty back = error; empty hint/note = warn.
+`ask: false` with no `<!-- back -->`: the whole body after the title is the back, front is absent. That is the normal reference card.
+
+## Code fences — the only Markdown structure the parser knows
+
+Opener: 0–3 spaces (no tab), then 3+ identical ``` or ~~~, then anything.
+While open: NOTHING is interpreted — no markers, no refs, no `$` counting. Closes on 0–3 spaces + ≥ as many of the same char + only spaces. No nesting. Open at EOF = warn.
+Not tracked at all: inline code spans, indented code blocks, HTML blocks, block quotes, lists. Markers are safe there anyway because markers require column 0 and the exact whole line.
+
+## References — `![[id]]`
+
+Why the format exists: a fact several cards depend on lives in one `ask: false` card, so fixing it fixes every card that uses it.
+A reference is a line whose entire trimmed content is `![[` + valid id + `]]`. Nothing else is a reference.
+- Inline `![[id]]` in a sentence → literal, warn `ref-inline`. `[[id]]` (no `!`), `![[ id ]]`, `![[id|label]]` → literal. Inside fences → literal.
+- Whole-line `![[...]]` whose contents are not a valid id → literal + warn `ref-not-an-id`. Plain `[[...]]` anywhere (R/Julia `x[[1]]`, `[[a, b]]`) is never a reference and never flagged.
+- Expanded only in `back`. In front → literal + warn (answer leak). In hint/note → literal, silent.
+- One level deep. A reference inside the included back stays literal, exactly as written. The same back therefore looks different when studied on its own — intended.
+- Expansion output, exactly: blank line, `> ` + target title, blank line, target's back, blank line. Only the back is inserted (never target front/hint/note).
+- Unresolved: line stays as written + warn. The parser inserts NO message text; the client shows its own UI in its own locale.
+- Self-reference = error. Over 16 distinct refs = warn.
+
+## Items (what actually gets scheduled)
+
+`ask: false` → no items. Else → `id`, plus `id#r` if `reverse: true`. There are no other item kinds.
+
+| item | front | back |
+|---|---|---|
+| `id` | title + front | title + back |
+| `id#r` | back (title hidden) | title + front |
+
+hint shows on the front side; note shows after grading.
+
+## Bytes (interop killers — implementers)
+
+UTF-8 only; strip one leading BOM; invalid UTF-8 = error, never U+FFFD.
+Line terminators: CRLF, LF, CR only. Do NOT use the standard library's line splitter — they split on more.
+Trim = TAB and SPACE only. NBSP, U+3000, U+FEFF are content. Blank line = only ASCII spaces.
+NFC-normalize paths, id, deck segments, tags. NEVER normalize title/front/hint/back/note.
+No `\d` `\w` `\s` `\b` anywhere; use `[0-9]`, `[A-Za-z0-9_-]`, `[ \t]`, and whole-string match APIs (in some languages `$` also matches before a trailing newline).
+All ordering (scan order, diagnostic order) is UTF-8 byte order of the path.
+No YAML library. No CommonMark library. Expect 300–450 lines per implementation.
+
+## Rendering (binding on clients)
+
+Raw HTML escaped and shown as text, never executed. Non-marker HTML comments shown literally.
+Math: `$...$` / `$$...$$` are protected spans — never passed through inline Markdown; literal `$` must be `\$`; no typesetter → show source monospaced. Odd unescaped `$` count = warn.
+Images: relative paths only, resolved from the card's directory; remote URLs are shown as links, never fetched; missing file = visible placeholder naming the path, never nothing.
+Nothing the app writes (error text, placeholders, deck labels) is ever inserted into card text.
+
+## Lint
+
+This is the complete rule set. Implementations MUST NOT add a rule, and there is **no suppression mechanism** — a rule that fires on a correct card is fixed in the rule.
+
+Errors (card excluded from queue and from `![[id]]` resolution; history kept):
+`encoding-invalid` `file-too-large` `frontmatter-unterminated` `frontmatter-syntax` `format-unsupported` `id-missing` `id-invalid` `id-duplicate` `tag-invalid` `title-missing` `marker-duplicate` `marker-order` `marker-malformed` `back-missing` `back-empty` `ref-self`
+
+Warnings (card still studied):
+`ref-unresolved` `ref-in-front` `ref-inline` `ref-not-an-id` `ref-too-many` `marker-unknown` `fence-unterminated` `empty-region` `back-too-long` (1200 chars, excluding fences/tables/ref lines) `tag-duplicate` `odd-dollar` `duplicate-content`
+
+Info: `unknown-key`
+
+Diagnostic: `{rule, severity, path, line (1-based), column (1-based UTF-8 byte offset)}`, sorted by path bytes → line → column → rule. Rule ids normative; message text localizable.
+Deliberately absent, do not add: "front is only a noun phrase", "note has no source", "same text in 3+ cards".
+Never fix a warning by changing an id or by splitting a card — that destroys review history. Shorten, or extract into an `ask: false` card and reference it.
+
+## Runtime, paths the apps write, limits
+
+Error cards are excluded individually; the vault is never rejected as a whole. Counts of error cards / unresolved refs / orphan log entries / skipped `.md` files must be visible somewhere.
+Apps write exactly two paths and no others; agents treat both as read-only:
+- `data/reviews/<YYYY-MM-DD>.jsonl` — the review log. Append-only, merge = union of lines, order meaningless. Entries: `{item, at (RFC 3339 UTC), event: review|suspend|unsuspend, ...}`. Latest suspend/unsuspend wins. Orphan entries are kept forever.
+- `data/insights.json` — one JSON object, rewritten whole: the app's derived ranking of weak items, written for the learner and their agents. No app reads it back, so it is fully regenerable; take either side on a merge conflict. Schema out of scope.
+
+Limits: file 1 MiB · id 3–64 · 16 refs/card (warn) · implementations handle 20,000 cards; transports must not use one request per file.
+CLI: exit 1 on any error, `--strict` makes warnings fail, `--format json` emits the diagnostic objects.
+
+## Editing and deleting
+
+Reword, retitle, reformat, fix a typo, add a hint or note, shorten, extract shared text → **keep the id**.
+Change *what the card asks* → new id **and delete the old file** — but **deleting a card file requires human confirmation**: report that it is needed, do not do it. The history cannot be reconstructed.
+
+## Non-goals (frozen)
+
+No in-app card editing. No server. **No cloze** — v2 has no in-card deletion syntax and no `#cN` items; enumerations are one card per question plus an `ask: false` reference card, and cloze would arrive under `format: 3`. No `deck:` key or any other deck override. No lint suppression, per card or per deck. No `.apkg`. No type-in answers, image occlusion, or audio — a converter that meets one MUST stop and ask a human rather than flatten it. No analytics. No app-invented vocabulary in card content. No reference depth > 1 and no `![[id|label]]`.
+
+Anchor is an independent format, not affiliated with or endorsed by any other flashcard, note-taking or AI product. Product names elsewhere in this repository are their owners' trademarks.

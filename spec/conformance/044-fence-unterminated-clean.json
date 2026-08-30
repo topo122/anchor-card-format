@@ -1,0 +1,16 @@
+{
+  "card": {
+    "ask": true,
+    "back": "A.\n\n```js\nlet x = 1;\n```",
+    "deck": [],
+    "extra": {},
+    "id": "CARD0001",
+    "items": [
+      "CARD0001"
+    ],
+    "reverse": false,
+    "tags": [],
+    "title": "T"
+  },
+  "diagnostics": []
+}

@@ -1,0 +1,41 @@
+# Anchor vault .gitignore
+#
+# Ignore OS and editor scratch only. Everything else in this repo is source of truth.
+#
+# NOT ignored, on purpose:
+#   data/reviews/*.jsonl   review log written by the apps — the only copy of your history
+#   data/insights.json     derived state the apps keep alongside it
+# Both are committed. Never add them here, and never delete them: entries whose card
+# was deleted are kept forever by design.
+
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+.Trash-*
+.nfs*
+
+# Editor scratch
+*~
+*.swp
+*.swo
+.#*
+
+# Obsidian per-machine UI state (the rest of .obsidian/ is worth committing).
+# Uncomment if you open this vault on more than one machine.
+#.obsidian/workspace.json
+#.obsidian/workspace-mobile.json

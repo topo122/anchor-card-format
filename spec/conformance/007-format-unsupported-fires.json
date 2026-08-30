@@ -1,0 +1,24 @@
+{
+  "card": {
+    "ask": true,
+    "back": "A.",
+    "deck": [],
+    "extra": {},
+    "id": "CARD0001",
+    "items": [
+      "CARD0001"
+    ],
+    "reverse": false,
+    "tags": [],
+    "title": "T"
+  },
+  "diagnostics": [
+    {
+      "column": 9,
+      "line": 3,
+      "path": "007-format-unsupported-fires.md",
+      "rule": "format-unsupported",
+      "severity": "error"
+    }
+  ]
+}

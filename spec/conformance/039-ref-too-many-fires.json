@@ -1,0 +1,143 @@
+{
+  "card": {
+    "ask": true,
+    "back": "Answer.\n\n![[REF0000001]]\n\n![[REF0000002]]\n\n![[REF0000003]]\n\n![[REF0000004]]\n\n![[REF0000005]]\n\n![[REF0000006]]\n\n![[REF0000007]]\n\n![[REF0000008]]\n\n![[REF0000009]]\n\n![[REF0000010]]\n\n![[REF0000011]]\n\n![[REF0000012]]\n\n![[REF0000013]]\n\n![[REF0000014]]\n\n![[REF0000015]]\n\n![[REF0000016]]\n\n![[REF0000017]]",
+    "deck": [],
+    "extra": {},
+    "id": "CARD0001",
+    "items": [
+      "CARD0001"
+    ],
+    "reverse": false,
+    "tags": [],
+    "title": "Refs"
+  },
+  "diagnostics": [
+    {
+      "column": 1,
+      "line": 10,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 12,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 14,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 16,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 18,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 20,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 22,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 24,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 26,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 28,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 30,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 32,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 34,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 36,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 38,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 40,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 42,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-too-many",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 42,
+      "path": "039-ref-too-many-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    }
+  ]
+}

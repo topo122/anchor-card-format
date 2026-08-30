@@ -1,0 +1,27 @@
+{
+  "card": {
+    "ask": true,
+    "back": "A.",
+    "deck": [],
+    "extra": {},
+    "id": "CARD0001",
+    "items": [
+      "CARD0001"
+    ],
+    "reverse": false,
+    "tags": [
+      "a",
+      ""
+    ],
+    "title": "T"
+  },
+  "diagnostics": [
+    {
+      "column": 7,
+      "line": 3,
+      "path": "015-tag-invalid-fires.md",
+      "rule": "tag-invalid",
+      "severity": "error"
+    }
+  ]
+}

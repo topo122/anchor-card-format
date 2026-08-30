@@ -1,0 +1,26 @@
+{
+  "card": {
+    "ask": true,
+    "back": "A.",
+    "deck": [],
+    "extra": {},
+    "id": "CARD0001",
+    "items": [
+      "CARD0001"
+    ],
+    "reverse": false,
+    "tags": [
+      "a"
+    ],
+    "title": "T"
+  },
+  "diagnostics": [
+    {
+      "column": 1,
+      "line": 4,
+      "path": "005-frontmatter-syntax-fires.md",
+      "rule": "frontmatter-syntax",
+      "severity": "error"
+    }
+  ]
+}

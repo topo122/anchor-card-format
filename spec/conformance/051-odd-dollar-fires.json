@@ -1,0 +1,25 @@
+{
+  "card": {
+    "ask": true,
+    "back": "A.",
+    "deck": [],
+    "extra": {},
+    "front": "It costs $5.",
+    "id": "CARD0001",
+    "items": [
+      "CARD0001"
+    ],
+    "reverse": false,
+    "tags": [],
+    "title": "T"
+  },
+  "diagnostics": [
+    {
+      "column": 10,
+      "line": 7,
+      "path": "051-odd-dollar-fires.md",
+      "rule": "odd-dollar",
+      "severity": "warn"
+    }
+  ]
+}

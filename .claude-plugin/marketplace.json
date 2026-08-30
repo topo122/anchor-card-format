@@ -1,0 +1,14 @@
+{
+  "name": "anchor-format",
+  "owner": {
+    "name": "topo122"
+  },
+  "description": "The plugin for the Anchor Card Format v2 — Markdown flashcards, one card per file, in your own Git repo.",
+  "plugins": [
+    {
+      "name": "anchor",
+      "source": "./",
+      "description": "Write and repair Anchor Card Format v2 flashcards: authoring skill, /anchor:new-card, /anchor:fix-card, and a lint-on-write hook."
+    }
+  ]
+}

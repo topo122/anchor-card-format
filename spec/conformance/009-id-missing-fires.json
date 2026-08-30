@@ -1,0 +1,12 @@
+{
+  "card": null,
+  "diagnostics": [
+    {
+      "column": 1,
+      "line": 3,
+      "path": "009-id-missing-fires.md",
+      "rule": "id-missing",
+      "severity": "error"
+    }
+  ]
+}

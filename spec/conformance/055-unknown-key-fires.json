@@ -1,0 +1,26 @@
+{
+  "card": {
+    "ask": true,
+    "back": "A.",
+    "deck": [],
+    "extra": {
+      "x-source": "Casella & Berger"
+    },
+    "id": "CARD0001",
+    "items": [
+      "CARD0001"
+    ],
+    "reverse": false,
+    "tags": [],
+    "title": "T"
+  },
+  "diagnostics": [
+    {
+      "column": 1,
+      "line": 3,
+      "path": "055-unknown-key-fires.md",
+      "rule": "unknown-key",
+      "severity": "info"
+    }
+  ]
+}

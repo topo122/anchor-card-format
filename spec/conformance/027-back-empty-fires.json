@@ -1,0 +1,24 @@
+{
+  "card": {
+    "ask": true,
+    "deck": [],
+    "extra": {},
+    "front": "Q.",
+    "id": "CARD0001",
+    "items": [
+      "CARD0001"
+    ],
+    "reverse": false,
+    "tags": [],
+    "title": "T"
+  },
+  "diagnostics": [
+    {
+      "column": 1,
+      "line": 9,
+      "path": "027-back-empty-fires.md",
+      "rule": "back-empty",
+      "severity": "error"
+    }
+  ]
+}

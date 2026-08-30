@@ -1,0 +1,27 @@
+# .gitignore for the anchor-card-format repository itself.
+# The vault-side .gitignore that users copy is templates/.gitignore — a different file
+# with different rules. Do not merge the two.
+
+# npm install output. anchor-lint has zero dependencies, so this should stay empty,
+# but a stray `npm i <anything>` must never land in a commit.
+node_modules/
+
+# Scratch vaults the test suite builds and tears down (lint/test/helpers.js, cli.test.js).
+lint/test/.tmp/
+lint/test/.tmp-cli/
+
+# Ignored because anchor-lint declares no dependencies: the lockfile would pin nothing
+# and only record its own format version. Delete this line the day a dependency is added.
+package-lock.json
+
+# macOS Finder metadata and AppleDouble sidecars, created just by opening a folder.
+.DS_Store
+._*
+
+# Windows Explorer thumbnail cache.
+Thumbs.db
+
+# Vim swap files, left behind when an editor is killed mid-edit.
+*.swp
+*.swo
+*~

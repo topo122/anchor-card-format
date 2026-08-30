@@ -1,0 +1,25 @@
+{
+  "card": {
+    "ask": true,
+    "back": "A.",
+    "deck": [],
+    "extra": {},
+    "front": "<!--back-->\nA.",
+    "id": "CARD0001",
+    "items": [
+      "CARD0001"
+    ],
+    "reverse": false,
+    "tags": [],
+    "title": "T"
+  },
+  "diagnostics": [
+    {
+      "column": 1,
+      "line": 7,
+      "path": "023-marker-malformed-fires.md",
+      "rule": "marker-malformed",
+      "severity": "error"
+    }
+  ]
+}

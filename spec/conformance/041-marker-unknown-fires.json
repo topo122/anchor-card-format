@@ -1,0 +1,24 @@
+{
+  "card": {
+    "ask": true,
+    "back": "A.\n\n<!-- todo -->",
+    "deck": [],
+    "extra": {},
+    "id": "CARD0001",
+    "items": [
+      "CARD0001"
+    ],
+    "reverse": false,
+    "tags": [],
+    "title": "T"
+  },
+  "diagnostics": [
+    {
+      "column": 1,
+      "line": 10,
+      "path": "041-marker-unknown-fires.md",
+      "rule": "marker-unknown",
+      "severity": "warn"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "cards": {
+    "Cards/a.md": {
+      "ask": true,
+      "back": "A.",
+      "deck": [
+        "Cards"
+      ],
+      "extra": {},
+      "front": "Same front.",
+      "id": "CARD0001",
+      "items": [
+        "CARD0001"
+      ],
+      "reverse": false,
+      "tags": [],
+      "title": "Same"
+    },
+    "Cards/b.md": {
+      "ask": true,
+      "back": "B.",
+      "deck": [
+        "Cards"
+      ],
+      "extra": {},
+      "front": "Same front.",
+      "id": "CARD0002",
+      "items": [
+        "CARD0002"
+      ],
+      "reverse": false,
+      "tags": [],
+      "title": "Same"
+    }
+  },
+  "diagnostics": [
+    {
+      "column": 1,
+      "line": 5,
+      "path": "Cards/a.md",
+      "rule": "duplicate-content",
+      "severity": "warn"
+    },
+    {
+      "column": 1,
+      "line": 5,
+      "path": "Cards/b.md",
+      "rule": "duplicate-content",
+      "severity": "warn"
+    }
+  ],
+  "items": {
+    "CARD0001": {
+      "back": "Same\n\nA.",
+      "front": "Same\n\nSame front."
+    },
+    "CARD0002": {
+      "back": "Same\n\nB.",
+      "front": "Same\n\nSame front."
+    }
+  }
+}

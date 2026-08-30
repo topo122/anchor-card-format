@@ -1,0 +1,32 @@
+{
+  "name": "anchor-lint",
+  "version": "2.0.0",
+  "description": "Linter for the Anchor Card Format v2 (SPEC.md). Zero dependencies.",
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://github.com/topo122/anchor-card-format",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/topo122/anchor-card-format.git",
+    "directory": "lint"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "anchor-lint": "bin/anchor-lint.js"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "build:conformance": "node tools/build-conformance.js"
+  },
+  "dependencies": {}
+}

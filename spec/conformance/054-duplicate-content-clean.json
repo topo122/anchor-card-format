@@ -1,0 +1,47 @@
+{
+  "cards": {
+    "Cards/a.md": {
+      "ask": true,
+      "back": "A.",
+      "deck": [
+        "Cards"
+      ],
+      "extra": {},
+      "front": "One front.",
+      "id": "CARD0001",
+      "items": [
+        "CARD0001"
+      ],
+      "reverse": false,
+      "tags": [],
+      "title": "Same"
+    },
+    "Cards/b.md": {
+      "ask": true,
+      "back": "B.",
+      "deck": [
+        "Cards"
+      ],
+      "extra": {},
+      "front": "Other front.",
+      "id": "CARD0002",
+      "items": [
+        "CARD0002"
+      ],
+      "reverse": false,
+      "tags": [],
+      "title": "Same"
+    }
+  },
+  "diagnostics": [],
+  "items": {
+    "CARD0001": {
+      "back": "Same\n\nA.",
+      "front": "Same\n\nOne front."
+    },
+    "CARD0002": {
+      "back": "Same\n\nB.",
+      "front": "Same\n\nOther front."
+    }
+  }
+}

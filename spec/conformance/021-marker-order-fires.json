@@ -1,0 +1,25 @@
+{
+  "card": {
+    "ask": true,
+    "back": "A.",
+    "deck": [],
+    "extra": {},
+    "id": "CARD0001",
+    "items": [
+      "CARD0001"
+    ],
+    "note": "N.",
+    "reverse": false,
+    "tags": [],
+    "title": "T"
+  },
+  "diagnostics": [
+    {
+      "column": 1,
+      "line": 10,
+      "path": "021-marker-order-fires.md",
+      "rule": "marker-order",
+      "severity": "error"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "card": {
+    "ask": true,
+    "back": "A.\n\n![[NOSUCHCARD]]",
+    "deck": [],
+    "extra": {},
+    "id": "CARD0001",
+    "items": [
+      "CARD0001"
+    ],
+    "reverse": false,
+    "tags": [],
+    "title": "T"
+  },
+  "diagnostics": [
+    {
+      "column": 1,
+      "line": 10,
+      "path": "031-ref-unresolved-fires.md",
+      "rule": "ref-unresolved",
+      "severity": "warn"
+    }
+  ]
+}

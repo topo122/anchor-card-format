@@ -1,0 +1,12 @@
+{
+  "card": null,
+  "diagnostics": [
+    {
+      "column": 1,
+      "line": 5,
+      "path": "017-title-missing-fires.md",
+      "rule": "title-missing",
+      "severity": "error"
+    }
+  ]
+}

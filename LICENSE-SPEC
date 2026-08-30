@@ -1,0 +1,76 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+SPDX-License-Identifier: CC-BY-4.0
+
+Copyright (c) 2026 topo122
+
+
+APPLIES TO
+
+  SPEC.md    the normative specification of the Anchor Card Format v2
+  llms.txt   the compressed, non-authoritative restatement of the same rules
+
+Everything else in this repository — including lint/, templates/, examples/,
+skills/, commands/, hooks/ and spec/conformance/ — is licensed MIT instead.
+See LICENSE.
+
+
+THE LICENSE ITSELF
+
+The full legal text is not reproduced here. The authoritative text is:
+
+  https://creativecommons.org/licenses/by/4.0/legalcode
+
+A human-readable summary, which is not a substitute for the legal text:
+
+  https://creativecommons.org/licenses/by/4.0/
+
+Where anything below disagrees with the legal text at that URL, the legal text
+governs.
+
+
+WHAT IT MEANS, IN SHORT
+
+You are free to:
+
+  Share   — copy and redistribute the material in any medium or format.
+  Adapt   — remix, transform, and build upon the material for any purpose,
+            including commercially.
+
+The licensor cannot revoke these freedoms as long as you follow the license
+terms.
+
+Under the following terms:
+
+  Attribution     — You must give appropriate credit, provide a link to the
+                    license, and indicate if changes were made. You may do so
+                    in any reasonable manner, but not in any way that suggests
+                    the licensor endorses you or your use.
+
+  No additional
+  restrictions    — You may not apply legal terms or technological measures
+                    that legally restrict others from doing anything the
+                    license permits.
+
+Notices: no warranties are given. The license may not give you all of the
+permissions necessary for your intended use — for example, publicity, privacy,
+or moral rights may limit how you use the material.
+
+
+SUGGESTED ATTRIBUTION
+
+  "Anchor Card Format v2 specification" by topo122, licensed under CC BY 4.0.
+  https://creativecommons.org/licenses/by/4.0/
+
+Implementing the format does not by itself require attribution: a license
+covers the text of these documents, not the ideas or the file format they
+describe, and an independent implementation is your own work under your own
+license.
+
+
+TRADEMARKS
+
+This license covers the documents, not any name or logo. Anchor is an
+independent format and is not affiliated with, sponsored by, or endorsed by
+any other flashcard, note-taking, or AI product. Attribution must not be
+worded so as to imply such an affiliation.

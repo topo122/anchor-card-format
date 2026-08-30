@@ -1,0 +1,39 @@
+{
+  "cards": {
+    "Cards/CARD0001.md": {
+      "ask": true,
+      "back": "A.\n\n![[CARD0002]]",
+      "deck": [
+        "Cards"
+      ],
+      "extra": {},
+      "id": "CARD0001",
+      "items": [
+        "CARD0001"
+      ],
+      "reverse": false,
+      "tags": [],
+      "title": "T"
+    },
+    "Cards/CARD0002.md": {
+      "ask": false,
+      "back": "The shared text.",
+      "deck": [
+        "Cards"
+      ],
+      "extra": {},
+      "id": "CARD0002",
+      "items": [],
+      "reverse": false,
+      "tags": [],
+      "title": "Shared definition"
+    }
+  },
+  "diagnostics": [],
+  "items": {
+    "CARD0001": {
+      "back": "T\n\nA.\n\n\n> Shared definition\n\nThe shared text.",
+      "front": "T"
+    }
+  }
+}
