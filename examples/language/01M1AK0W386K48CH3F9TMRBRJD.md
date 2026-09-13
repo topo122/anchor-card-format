@@ -1,5 +1,6 @@
 ---
 id: 01M1AK0W386K48CH3F9TMRBRJD
+deck: Japanese/Grammar
 tags: [grammar, giving-verbs]
 ---
 

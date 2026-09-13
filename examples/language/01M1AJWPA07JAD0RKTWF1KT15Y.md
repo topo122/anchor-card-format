@@ -1,5 +1,6 @@
 ---
 id: 01M1AJWPA07JAD0RKTWF1KT15Y
+deck: Japanese/Grammar
 tags: [grammar, verbs]
 ---
 

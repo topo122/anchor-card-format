@@ -1,5 +1,6 @@
 ---
 id: 01M1AJRGGRG9RMPMA6BWECDS49
+deck: Medicine/Physiology
 tags: [pathology, haematology]
 ---
 

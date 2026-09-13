@@ -1,7 +1,7 @@
 ---
 id: 01M1AJMAQGC86CAF8HW8QVQ5QY
+deck: Medicine/Physiology
 tags: [clinical-signs, cardiology, vocabulary]
-reverse: true
 ---
 
 # Orthopnea

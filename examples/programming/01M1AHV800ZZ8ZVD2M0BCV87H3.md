@@ -1,5 +1,6 @@
 ---
 id: 01M1AHV800ZZ8ZVD2M0BCV87H3
+deck: Programming/Basics
 tags: [rust, ownership]
 ---
 
