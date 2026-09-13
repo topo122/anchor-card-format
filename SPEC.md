@@ -170,7 +170,9 @@ There are exactly three markers. A line is a marker when, **trimmed**, it is exa
   writers SHOULD use front → back → hint → note or front → hint → back → note.
 - Leading and trailing blank lines of each face are removed; interior blank lines are kept.
 - **`---`, emoji, tables, headings and code fences are ordinary body text.** They never split faces.
-- Any other `<!-- ... -->` line is ordinary text.
+- Any other `<!-- ... -->` line stays in its face as ordinary text. Whether it is displayed differs
+  between apps, so writers SHOULD NOT put other HTML comments in cards. In particular, a comment
+  cannot limit what a reference inlines: `[[id]]` always inlines the whole back (§9).
 - **A card with no `<!-- back -->`, or nothing after it, has an empty back.** Readers still load it;
   the linter reports `empty-back` (error). This applies to `ask: false` cards too — the back is what
   `[[id]]` pulls in.
@@ -178,7 +180,8 @@ There are exactly three markers. A line is a marker when, **trimmed**, it is exa
 ### 8.3 Rendering
 
 The body is Markdown. Apps render a common subset (paragraphs, emphasis, lists, quotes, tables, code);
-anything they do not understand is shown as text. Apps MUST NOT execute HTML or scripts from a card.
+anything they do not understand is shown as text or dropped. Apps MUST NOT execute scripts from a
+card; writers SHOULD NOT rely on raw HTML.
 
 ---
 
