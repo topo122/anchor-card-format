@@ -1,5 +1,6 @@
 ---
 id: 01M1AK97QG9SFKMPRCGCJQYSFC
+deck: Japanese/Grammar
 tags: [grammar, verbs, te-form]
 ---
 
@@ -15,7 +16,7 @@ Only one of the three is voiced, and it is voiced because the syllable it replac
 
 行く is the exception: 行って, not 行いて.
 
-![[01M1AK97PVJA1Q063702FFQ5JN]]
+[[01M1AK97PVJA1Q063702FFQ5JN]]
 
 <!-- note -->
 す keeps a full syllable rather than reducing to い, because the te-form here attaches to the regular 連用形 話し.

@@ -1,5 +1,6 @@
 ---
 id: 01M1AK97PM7KTT2HNM0JP396JQ
+deck: Medicine/Physiology
 tags: [physiology, cardiology, action-potential]
 ---
 
@@ -12,7 +13,7 @@ The inward rectifier **potassium** current (IK1), which conducts well at negativ
 
 A ventricular myocyte has no pacemaker current, so its phase 4 is flat and the cell waits to be depolarised by its neighbours.
 
-![[01M1AK97NZEATR0HY68PXG0VC7]]
+[[01M1AK97NZEATR0HY68PXG0VC7]]
 
 <!-- note -->
 This is the one phase where ventricular and nodal cells differ in kind rather than in degree.

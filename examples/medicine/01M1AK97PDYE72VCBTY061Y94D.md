@@ -1,5 +1,6 @@
 ---
 id: 01M1AK97PDYE72VCBTY061Y94D
+deck: Medicine/Physiology
 tags: [physiology, cardiology, action-potential]
 ---
 
@@ -15,7 +16,7 @@ Inward **calcium** current through L-type Ca2+ channels is balanced by outward *
 
 The Ca2+ that enters here triggers the release of further Ca2+ from the sarcoplasmic reticulum, which is how depolarisation is coupled to contraction.
 
-![[01M1AK97NZEATR0HY68PXG0VC7]]
+[[01M1AK97NZEATR0HY68PXG0VC7]]
 
 <!-- note -->
 The plateau is the reason cardiac muscle cannot be tetanised: the ventricle has finished contracting before it can be excited again.

@@ -1,5 +1,6 @@
 ---
 id: 01M1AK51WG5RKMG140VSEXCRPP
+deck: Medicine/Physiology
 tags: [neurology, examination]
 ---
 

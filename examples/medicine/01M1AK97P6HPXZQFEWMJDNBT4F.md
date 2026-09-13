@@ -1,5 +1,6 @@
 ---
 id: 01M1AK97P6HPXZQFEWMJDNBT4F
+deck: Medicine/Physiology
 tags: [physiology, cardiology, action-potential]
 ---
 
@@ -12,7 +13,7 @@ The fast inward **sodium** current. Once threshold is reached, voltage-gated Na+
 
 Those channels inactivate within a few milliseconds, so the upstroke is self-limiting: the current switches itself off rather than being turned off by another conductance.
 
-![[01M1AK97NZEATR0HY68PXG0VC7]]
+[[01M1AK97NZEATR0HY68PXG0VC7]]
 
 <!-- note -->
 The inactivated channels cannot reopen until the membrane has repolarised, which is the molecular basis of the refractory period.

@@ -1,5 +1,6 @@
 ---
 id: 01M1AK97Q9HGYEWXTPTP3ZBDA9
+deck: Japanese/Grammar
 tags: [grammar, verbs, te-form]
 ---
 
@@ -12,7 +13,7 @@ What replaces the final syllable?
 
 All three take the voiced で, and the plain past is correspondingly んだ: 飲んだ, 遊んだ, 死んだ.
 
-![[01M1AK97PVJA1Q063702FFQ5JN]]
+[[01M1AK97PVJA1Q063702FFQ5JN]]
 
 <!-- note -->
 死ぬ is the only verb in modern Japanese ending in ぬ, so this group is in practice む and ぶ plus one word.

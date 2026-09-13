@@ -1,5 +1,6 @@
 ---
 id: 01M1AJRGGRDN3HC0DCGVMWKS98
+deck: Japanese/Grammar
 tags: [grammar, particles]
 ---
 

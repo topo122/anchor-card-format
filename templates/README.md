@@ -3,7 +3,7 @@
 Copy `AGENTS.md`, `CLAUDE.md` and `.gitignore` into the root of your card vault (the Git repo holding
 your `.md` cards), then commit them.
 
-`AGENTS.md` is the vault's working summary of the format — Cursor, Codex and most agent tools read it
+`AGENTS.md` points agents at `SPEC.md` and holds your vault-specific conventions — Cursor, Codex and most agent tools read it
 on their own. Claude Code only auto-loads `CLAUDE.md`, whose first line is `@AGENTS.md`, so it picks
 up the same page plus a few Claude-specific notes. Keep format rules in `AGENTS.md` only, so the two
 can never drift apart.

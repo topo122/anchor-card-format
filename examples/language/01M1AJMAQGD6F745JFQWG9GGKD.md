@@ -1,6 +1,6 @@
 ---
 id: 01M1AJMAQGD6F745JFQWG9GGKD
-reverse: true
+deck: Japanese/Grammar
 tags: [vocabulary, nouns]
 ---
 

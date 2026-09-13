@@ -1,10 +1,13 @@
 ---
 id: 01M1AK97NZEATR0HY68PXG0VC7
+deck: Medicine/Physiology
 tags: [physiology, cardiology, action-potential]
 ask: false
 ---
 
 # The ventricular action potential
+
+<!-- back -->
 
 A working ventricular myocyte rests near -90 mV, and its action potential is conventionally divided into five phases numbered 0 to 4. Each phase is the net result of whichever ion currents are open at that moment.
 
