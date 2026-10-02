@@ -162,7 +162,7 @@ There are exactly three markers. A line is a marker when, **trimmed**, it is exa
 |---|---|---|
 | *(none — the start of the body)* | **front** | the question |
 | `<!-- back -->` | **back** | after the learner reveals the answer |
-| `<!-- hint -->` | **hint** | with the back, after reveal: the way to reach the answer, a common trap |
+| `<!-- hint -->` | **hint** | with the front, before reveal: a nudge toward the answer. Apps MAY keep it visible after reveal. References in it are shown as links, not inlined |
 | `<!-- note -->` | **note** | with the back, after reveal: context, caveats, sources |
 
 - Text before the first marker is the front (minus the title line).
