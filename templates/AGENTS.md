@@ -11,7 +11,8 @@ is written down; this file deliberately repeats none of it. Do not write cards f
 
 - Never change an existing `id`, and never reuse the id of a deleted card.
 - Never delete a card file — report that a deletion is needed and let a person do it.
-- Never write anything under `data/` (the review log is the only copy of the history).
+- Never write anything under `data/` (the review log is the only copy of the history). The one
+  exception is statute files in `data/statutes/`, built with `fetch_statutes.py` (SPEC §14).
 - Never split a card to silence a lint warning.
 
 ## This vault

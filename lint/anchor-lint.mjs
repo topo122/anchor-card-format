@@ -2230,6 +2230,216 @@ function wikiRefIDs(line) {
   return [...line.matchAll(new RegExp(WIKI_REF_RE.source, "g"))].map((m) => m[1]);
 }
 
+// src/core/statutes.ts
+var STATUTES_DIRECTORY = "data/statutes";
+function isStatutePath(path) {
+  const parts = path.split("/");
+  if (parts.length !== 3 || parts[0] !== "data" || parts[1] !== "statutes") return false;
+  const name = parts[2];
+  return name.endsWith(".json") && name.length > ".json".length && !name.startsWith(".");
+}
+function articleNumbers(article) {
+  return article.split("_").map((n) => Number(n));
+}
+function compareArticles(a, b) {
+  const x = articleNumbers(a);
+  const y = articleNumbers(b);
+  for (let i = 0; i < Math.max(x.length, y.length); i++) {
+    const d = (x[i] ?? -1) - (y[i] ?? -1);
+    if (d !== 0) return d;
+  }
+  return 0;
+}
+function tocNodes(v) {
+  if (!Array.isArray(v)) return [];
+  const out = [];
+  for (const raw of v) {
+    if (typeof raw !== "object" || raw === null) continue;
+    const o = raw;
+    if (typeof o.title !== "string" || o.title === "") continue;
+    const node = { title: o.title };
+    if (typeof o.from === "string" && typeof o.to === "string") {
+      node.from = o.from;
+      node.to = o.to;
+    }
+    const children = tocNodes(o.children);
+    if (children.length > 0) node.children = children;
+    out.push(node);
+  }
+  return out;
+}
+function parseStatuteFile(text) {
+  let raw;
+  try {
+    raw = JSON.parse(text);
+  } catch {
+    return null;
+  }
+  if (typeof raw !== "object" || raw === null) return null;
+  const o = raw;
+  if (o.format !== 1 || typeof o.law !== "string" || o.law === "") return null;
+  if (typeof o.articles !== "object" || o.articles === null) return null;
+  const strings = (v) => Array.isArray(v) ? v.filter((s) => typeof s === "string" && s !== "") : [];
+  const subjects = strings(o.subjects);
+  const paths = [];
+  for (const source of strings(o.paths)) {
+    try {
+      paths.push(new RegExp(source));
+    } catch {
+    }
+  }
+  const articles = o.articles;
+  const listed = Array.isArray(o.order) ? o.order.filter((k) => typeof k === "string" && articles[k] !== void 0) : [];
+  return {
+    paths,
+    order: listed.length > 0 ? listed : Object.keys(articles).sort(compareArticles),
+    toc: tocNodes(o.toc),
+    law: o.law,
+    aliases: strings(o.aliases),
+    subjects: subjects.length > 0 ? subjects : [o.law],
+    source: typeof o.source === "object" && o.source !== null ? o.source : {},
+    articles
+  };
+}
+function ascii(digits) {
+  return digits.replace(/[０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 65248));
+}
+var N = "[0-9\uFF10-\uFF19]+";
+var ARTICLE_RE = new RegExp(`\u7B2C?(${N})\u6761((?:\u306E${N})*)(?:\u7B2C?(${N})\u9805)?(?:\u7B2C?(${N})\u53F7)?`, "g");
+var FOREIGN_TAIL_RE = /[法律令則約典例]$/;
+var FOREIGN_PAREN_RE = /[法令則約典例]（[^（）]*）$/;
+var OLD_LAW_RE = /(?:旧|改正前)$/;
+var RELATIVE_RE = /[前次同本各旧]$/;
+var QUOTED_CAPTION_RE = /^(?:本文|前段|後段|ただし書|但書|柱書|[0-9０-９]+項|[0-9０-９]+号)*[*＊]*（([^（）]+)）/;
+function sharesBigram(a, b) {
+  for (let i = 0; i + 2 <= a.length; i++) if (b.includes(a.slice(i, i + 2))) return true;
+  return false;
+}
+var StatuteIndex = class _StatuteIndex {
+  laws;
+  byName = /* @__PURE__ */ new Map();
+  bySubject = /* @__PURE__ */ new Map();
+  /// 法令名と略称。長い順（`民事訴訟法` を `民` より先に当てる）。
+  prefixes = [];
+  constructor(laws) {
+    this.laws = laws;
+    for (const law of laws) {
+      if (!this.byName.has(law.law)) this.byName.set(law.law, law);
+      for (const s of law.subjects) if (!this.bySubject.has(s)) this.bySubject.set(s, law);
+      for (const p of [law.law, ...law.aliases]) this.prefixes.push([p, law]);
+    }
+    this.prefixes.sort((a, b) => b[0].length - a[0].length);
+  }
+  static empty = new _StatuteIndex([]);
+  /// 「相対パス → 本文」から条文ファイルだけ拾う。
+  static from(texts2) {
+    const laws = [];
+    for (const path of Object.keys(texts2).filter(isStatutePath).sort()) {
+      const law = parseStatuteFile(texts2[path]);
+      if (law !== null) laws.push(law);
+    }
+    return laws.length === 0 ? _StatuteIndex.empty : new _StatuteIndex(laws);
+  }
+  get isEmpty() {
+    return this.laws.length === 0;
+  }
+  /// カードの置き場（`刑法/論文暗記/….md`）から、法令名を書かない番号の読み先を決める。
+  defaultLawFor(relativePath) {
+    if (relativePath === void 0) return null;
+    const bySubject = this.bySubject.get(relativePath.split("/")[0] ?? "");
+    if (bySubject !== void 0) return bySubject.law;
+    return this.laws.find((law) => law.paths.some((re) => re.test(relativePath)))?.law ?? null;
+  }
+  /// 科目（パスの先頭）だけから決める。差し込んだ参照先（別の科目のカード）の本文に使う。
+  defaultLawForSubject(subject) {
+    return this.bySubject.get(subject)?.law ?? null;
+  }
+  /// 引用の頭の 📍 行が名指しする法令。`📍 警察官職務執行法　2条（質問）` のように手元に無い法令なら
+  /// null（その引用の中の番号は既定の法令で引かない）、法令を名指ししていなければ undefined。
+  lawNamedInLocator(line) {
+    const i = line.indexOf("\u{1F4CD}");
+    if (i < 0) return void 0;
+    const text = line.slice(i + "\u{1F4CD}".length).replace(/[*＊]/g, "").trim();
+    const word = text.split(/[\s　›>（(]/)[0] ?? "";
+    if (word === "") return void 0;
+    const known = this.prefixes.find(([p]) => p.length >= 2 && (word === p || word.startsWith(p + "\u7B2C")));
+    if (known !== void 0) return known[1].law;
+    return /[法律令則例約]$/.test(word) ? null : void 0;
+  }
+  article(law, article) {
+    return this.byName.get(law)?.articles[article] ?? null;
+  }
+  law(name) {
+    return this.byName.get(name) ?? null;
+  }
+  /// 前条・次条（法令の端なら null）。
+  neighbors(law, article) {
+    const order = this.byName.get(law)?.order ?? [];
+    const i = order.indexOf(article);
+    if (i < 0) return { prev: null, next: null };
+    return { prev: order[i - 1] ?? null, next: order[i + 1] ?? null };
+  }
+  /// その条を含む編・章・節…を外側から順に（`[第2編 罪, 第17章 文書偽造の罪]`）。
+  tocPath(law, article) {
+    const l = this.byName.get(law);
+    if (l === void 0) return [];
+    const at = l.order.indexOf(article);
+    if (at < 0) return [];
+    const contains = (n) => n.from !== void 0 && n.to !== void 0 && l.order.indexOf(n.from) <= at && at <= l.order.indexOf(n.to);
+    const path = [];
+    let level = l.toc;
+    for (; ; ) {
+      const hit = level.find(contains);
+      if (hit === void 0) return path;
+      path.push(hit);
+      level = hit.children ?? [];
+    }
+  }
+  /// 1行の中の条文番号。**引ける条文だけ**返す（押しても何も出ないものを押せる見た目にしない）。
+  refsIn(line, defaultLaw) {
+    if (this.isEmpty || !line.includes("\u6761")) return [];
+    const out = [];
+    for (const m of line.matchAll(ARTICLE_RE)) {
+      let start = m.index ?? 0;
+      const end = start + m[0].length;
+      const raw = line.slice(0, start);
+      const before = raw.replace(/[\s　*＊]+$/, "");
+      let law = null;
+      const hit = this.prefixes.find(([p]) => before.endsWith(p));
+      if (hit !== void 0) {
+        if (OLD_LAW_RE.test(before.slice(0, before.length - hit[0].length))) continue;
+        law = hit[1];
+        if (before.length === raw.length) start -= hit[0].length;
+      } else {
+        if (FOREIGN_TAIL_RE.test(before) || FOREIGN_PAREN_RE.test(before) || RELATIVE_RE.test(before)) continue;
+        law = defaultLaw === null ? null : this.byName.get(defaultLaw) ?? null;
+      }
+      if (law === null) continue;
+      const head = ascii(m[1]);
+      if (line.includes("\u{1F4DC}")) {
+        const quoted = QUOTED_CAPTION_RE.exec(line.slice(end))?.[1];
+        const caption = law.articles[head]?.caption ?? "";
+        if (quoted !== void 0 && caption !== "" && !sharesBigram(quoted, caption)) continue;
+      }
+      const article = [head, ...m[2].split("\u306E").filter((s) => s !== "").map(ascii)].join("_");
+      if (law.articles[article] !== void 0) {
+        out.push({
+          start,
+          end,
+          law: law.law,
+          article,
+          paragraph: m[3] === void 0 ? null : ascii(m[3]),
+          item: m[4] === void 0 ? null : ascii(m[4])
+        });
+      } else if (m[2] !== "" && law.articles[head] !== void 0) {
+        const cut = (m.index ?? 0) + m[0].indexOf("\u6761") + 1;
+        out.push({ start, end: cut, law: law.law, article: head, paragraph: null, item: null });
+      }
+    }
+    return out;
+  }
+};
+
 // src/core/types.ts
 function deckKey(d) {
   return `${d.subject}::${d.deck}`;
@@ -2269,6 +2479,23 @@ function lintVault(texts2, options = {}) {
   const add = (level, rule, file, line, message) => {
     findings2.push({ level, rule, file, line, message });
   };
+  const cardTexts = /* @__PURE__ */ new Map();
+  for (const [rel, text] of texts2) {
+    if (!isStatutePath(rel)) {
+      cardTexts.set(rel, text);
+      continue;
+    }
+    if (parseStatuteFile(text) === null) {
+      add(
+        "error",
+        "invalid-statute-file",
+        rel,
+        0,
+        "\u6761\u6587\u30D5\u30A1\u30A4\u30EB\u3068\u3057\u3066\u8AAD\u3081\u307E\u305B\u3093\uFF08JSON\u30FB`format: 1`\u30FB`law`\u30FB`articles` \u304C\u8981\u308A\u307E\u3059\uFF09\u3002\u30A2\u30D7\u30EA\u306F\u3053\u306E\u30D5\u30A1\u30A4\u30EB\u3092\u7121\u3044\u3082\u306E\u3068\u3057\u3066\u6271\u3046\u306E\u3067\u3001\u6761\u6587\u304C1\u3064\u3082\u51FA\u307E\u305B\u3093\u3002"
+      );
+    }
+  }
+  texts2 = cardTexts;
   const cards = [];
   const knownIDs = /* @__PURE__ */ new Set();
   for (const [rel, text] of texts2) {
@@ -2511,6 +2738,12 @@ function cardFiles(root2) {
     }
   };
   walk(root2);
+  const statutes = join(root2, ...STATUTES_DIRECTORY.split("/"));
+  if (existsSync(statutes)) {
+    for (const name of readdirSync(statutes).sort()) {
+      if (isStatutePath(`${STATUTES_DIRECTORY}/${name}`)) out.push(join(statutes, name));
+    }
+  }
   return out;
 }
 var root = process.argv[2];

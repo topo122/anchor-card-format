@@ -23,7 +23,8 @@ Never answer a format question from memory.
    attached to the wrong question.
 2. Deleting a card file — report that a deletion is needed; never perform it.
 3. Splitting a card to silence a warning — half the history is abandoned.
-4. Writing anything under `data/`.
+4. Writing anything under `data/` — except statute files in `data/statutes/`, and those only through
+   `tools/fetch_statutes.py` (SPEC §14.4).
 
 ## Writing
 
@@ -36,6 +37,8 @@ Never answer a format question from memory.
    ```
    Check it is not already in use.
 4. **Write the file** following SPEC §2–§9. Copy the layout of neighbouring cards in the vault.
+   In a law vault, also follow SPEC §14.5 (article numbers, quoting statutes, norm cards). If the
+   vault cites a statute it has no file for, say so in the report; generate the file only when asked.
 5. **Lint** the vault (the command in the vault's `CLAUDE.md`, or
    `node ${CLAUDE_PLUGIN_ROOT}/lint/anchor-lint.mjs <vault>`). Fix every error. The plugin hook also
    lints each card after it is written; silence from the hook is not proof, so run the linter.

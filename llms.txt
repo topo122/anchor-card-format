@@ -6,13 +6,14 @@ The format has exactly one normative document. Read it before writing or editing
 
 ## Specification
 
-- [SPEC.md](https://raw.githubusercontent.com/topo122/anchor-card-format/main/SPEC.md): the complete rules — which files are cards, frontmatter (`id`, `deck`, `tags`, `ask`), the `<!-- back -->` / `<!-- hint -->` / `<!-- note -->` markers, `[[id]]` references, what apps write, and lint.
+- [SPEC.md](https://raw.githubusercontent.com/topo122/anchor-card-format/main/SPEC.md): the complete rules — which files are cards, frontmatter (`id`, `deck`, `tags`, `ask`), the `<!-- back -->` / `<!-- hint -->` / `<!-- note -->` markers, `[[id]]` references, what apps write, lint, and statute files for Japanese law vaults (`data/statutes/`).
 
 ## Tools
 
 - [lint/anchor-lint.mjs](https://raw.githubusercontent.com/topo122/anchor-card-format/main/lint/anchor-lint.mjs): the reference linter. `node lint/anchor-lint.mjs <vault>`; exit 1 on errors.
+- [tools/fetch_statutes.py](https://raw.githubusercontent.com/topo122/anchor-card-format/main/tools/fetch_statutes.py): builds `data/statutes/*.json` from e-Gov. `python3 tools/fetch_statutes.py --out <vault>/data/statutes 民法 刑法`.
 - [skills/anchor-cards/SKILL.md](https://raw.githubusercontent.com/topo122/anchor-card-format/main/skills/anchor-cards/SKILL.md): the procedure for writing and repairing cards (no rules of its own).
 
 ## Examples
 
-- [examples/](https://github.com/topo122/anchor-card-format/tree/main/examples): lint-clean cards in four subjects.
+- [examples/](https://github.com/topo122/anchor-card-format/tree/main/examples): lint-clean cards in four subjects; `examples/law/` shows statute quotations and `examples/data/statutes/民法.json`.

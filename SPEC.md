@@ -1,6 +1,7 @@
 # Anchor Card Format v2 — Specification
 
-Status: **v2, in use.** This document is the **single source of truth** for the card format. Every
+Status: **v2, in use.** Last changed 2026-10-24: references in the note are inlined (§9), card links
+(§8.3), statute files (§14). This document is the **single source of truth** for the card format. Every
 other document — the README, `llms.txt`, the vault templates, the plugin skill and commands, any
 app's own notes, any vault's `CLAUDE.md` / `AGENTS.md` — may *point* here but MUST NOT restate the
 rules. Where anything disagrees with this file, this file is right.
@@ -183,6 +184,10 @@ The body is Markdown. Apps render a common subset (paragraphs, emphasis, lists, 
 anything they do not understand is shown as text or dropped. Apps MUST NOT execute scripts from a
 card; writers SHOULD NOT rely on raw HTML.
 
+A Markdown link whose target is a relative path to another card file (`[0511b](../norms/0511b.md)`)
+opens that card. Apps MAY show it on top of the current card, so that closing it returns to the same
+card in the same state (revealed or not).
+
 ---
 
 ## 9. References — `[[id]]`
@@ -191,17 +196,35 @@ A reference writes shared text once — typically a definition in an `ask: false
 inside every card that needs it.
 
 - Syntax: `[[id]]`, where `id` matches §6. It may appear anywhere in a line.
-- **Only references in the back are expanded.** Elsewhere they are shown as written.
-- A back line containing references is rendered as:
+- Where a reference stands decides what it shows:
+
+  | Face | A reference is shown as |
+  |---|---|
+  | back | the referenced card's back, inlined (below) |
+  | note | the same as in the back |
+  | front, hint | a link to the referenced card — **not inlined while the card is asked**, so the answer is not shown before reveal. Screens that show the back anyway (browsing a card) MAY inline references in the hint |
+
+- A back or note line containing references is rendered as:
   1. the line with every `[[id]]` removed and spaces collapsed — omitted if nothing is left
      (so `**Definition** [[stat-sd-def]]` keeps `**Definition**` as a label);
   2. then, for each reference in order, the **back** of the referenced card;
   3. if a referenced id does not resolve, the text *reference not found: `id`* (localised) —
      never silently dropped.
-- **One level only.** References inside the inlined back are not expanded again.
+- When a reference is followed by more text on its line (it sits mid-sentence), apps MAY keep a
+  name for it in place — the text inside the brackets, or the referenced card's title when that text
+  is a bare ULID — so the sentence still reads.
+- Apps SHOULD mark where inlined text begins and ends and which card it came from, and MAY open the
+  referenced card from that mark (§8.3).
+- **One level only.** References inside the inlined back are not expanded again; apps MAY show them
+  as links.
 - The stored files are never modified by expansion.
-- The linter reports an unresolved reference as `broken-ref` (error) and more than two references in
-  one back as `many-refs` (warn).
+- Brackets whose content is not a valid id (`[[0511b 相殺権の濫用]]`, with a space) are not a
+  reference. Apps MAY resolve such text to a card by its title — the whole title, then the title's
+  leading code (`0511b`), preferring the same subject, and never guessing between two candidates — and
+  otherwise show it as written, never as *reference not found*. Writers SHOULD write `[[id]]`; only
+  ids are checked by the linter.
+- The linter checks the references in the back: an unresolved one is `broken-ref` (error), and more
+  than two in one back is `many-refs` (warn).
 
 ### Rationale
 
@@ -223,7 +246,10 @@ Apps write **only** these paths, and never a card:
 
 The scheduling state of a card is recomputed from its log lines; it is not stored anywhere else.
 **The log is the only copy of the history.** Writers MUST NOT edit, sort, prune or delete anything
-under `data/`. Log lines for deleted cards stay.
+under `data/` other than `data/statutes/`. Log lines for deleted cards stay.
+
+Apps also **read**, and never write, `data/statutes/*.json` — statute text for the optional statute
+lookup (§14). Those files belong to the vault's owner and the tools they run.
 
 ---
 
@@ -241,6 +267,7 @@ Warnings and info never fail. Rules:
 | `missing-deck` | error | no `deck` (the directory is being used instead) |
 | `empty-back` | error | the back has no non-blank line |
 | `broken-ref` | error | a `[[id]]` in the back resolves to no card |
+| `invalid-statute-file` | error | a `.json` file directly in `data/statutes/` is not a statute file apps can read (§14.2) |
 | `long-back` | warn | the back has more than **12** non-blank lines — an essay, not a flashcard. A vault MAY pin its existing long cards in a baseline file; a card not on the baseline then fails as **error** |
 | `many-refs` | warn | more than **2** references in the back |
 | `front-not-a-question` | warn | the front is a single line of at most 20 characters with no sentence punctuation — a topic, not a question |
@@ -272,6 +299,121 @@ card has history, or by moving shared text into an `ask: false` card — not by 
 Cloze deletions, type-in answers, image occlusion, audio, reversed cards, block-form lists in
 frontmatter, reference depth beyond one, and in-app card editing are not part of v2. When material
 needs one of them, stop and ask rather than approximating it in prose.
+
+---
+
+## 14. Statutes (optional — Japanese law)
+
+A vault for studying Japanese law can carry the text of the statutes it cites. Apps then turn an
+article number in a card (`95条1項`) into something the learner can hover or tap to see that article
+on top of the card — with its paragraph or item highlighted, the previous and next article, and where
+it sits in the statute's parts and chapters — without leaving the card or flipping it.
+
+**Apps know no laws.** Which statutes exist, how they are abbreviated and which cards they apply to all
+come from the vault's files. A vault without `data/statutes/` sees no change, and apps do not fetch
+statute text over the network.
+
+### 14.1 Files
+
+A statute file is `data/statutes/<name>.json`, exactly that depth (`data/statutes/old/x.json` is not
+one). It is UTF-8 JSON:
+
+| Key | Required | Meaning |
+|---|---|---|
+| `format` | **yes** | The number `1`. |
+| `law` | **yes** | The statute's name as cards write it (`刑法`). Unique in the vault. |
+| `articles` | **yes** | Article key → article (below). |
+| `aliases` | no | Other spellings used in cards (`["刑訴法", "刑訴"]`). |
+| `subjects` | no | Vault top-level directories whose cards default to this statute. Absent: `[law]`. |
+| `paths` | no | Regular expressions matched against a card's vault-relative path, to choose a default for cards no subject decides (`^過去問/[^/]+/(令\|平)[0-9]+刑[-−]`). |
+| `source` | no | Where the text came from (`name`, `enforced`, `fetched`, …), shown under the text. |
+| `order` | no | Article keys in statute order, for previous / next. Absent: keys sorted by number. |
+| `toc` | no | Parts, chapters, sections: `[{title, from, to, children}]`, where `from` / `to` are the first and last article key inside. A part with no articles (`第1章　削除`) has neither. |
+| `divisions` | no | Hand-written subdivisions for the generator to insert into `toc`. Apps ignore it. |
+
+An **article key** is the article number in ASCII digits, with each `の` branch joined by `_`:
+`95` is 95条, `19_2` is 19条の2. An article is
+`{caption, paragraphs: [{num, text, items: [{title, text, sub: [...]}]}]}`; `items` and `sub` are
+optional.
+
+### 14.2 Reading
+
+- A file that is not JSON, or lacks `format: 1`, `law` or `articles`, is ignored as if absent; the
+  linter reports `invalid-statute-file`. Nothing else breaks.
+- An invalid expression in `paths` is dropped. Keys in `order` that are not in `articles` are dropped.
+- Two files with the same `law`, or claiming the same subject: the first in file-name order wins.
+
+### 14.3 Which numbers become links
+
+An article number is `第?N条` followed optionally by `のN` branches, `第?N項` and `第?N号`, where N is
+ASCII or full-width digits (`95条`, `第19条の2`, `９５条１項`, `177条2項3号`). Its statute is:
+
+1. **The statute named right before it**, by `law` or an alias, longest name first. Spaces and `*`
+   between the name and the number are allowed: `民法110条`, `刑訴法197条1項`, `**民法** 110条`.
+2. Otherwise **the card's default statute**: the one whose `subjects` contain the first directory of
+   the card's path, else the first whose `paths` match the path. Text inlined from another card by
+   `[[id]]` uses that card's subject instead.
+3. Otherwise none. In a card with no default, only numbers with a statute name are links.
+
+Inside a blockquote, a line containing `📍` whose first word is a known statute name (or such a name
+followed by `第`, as in `憲法第三章`) sets the statute for the rest of that blockquote. If the first
+word names a statute the vault does not have — it ends in 法, 律, 令, 則, 例 or 約 — numbers in that
+blockquote are not linked to the default.
+
+A number is **not** a link when:
+
+- the text right before it names a statute the vault does not have: it ends in 法, 律, 令, 則, 約, 典
+  or 例 (`会社法356条` without a 会社法 file, `同法95条`, `規則3条`), or is such a word followed by a
+  parenthetical (`理容師法（以下「法」という）12条`);
+- it refers to repealed or past text: `旧民法95条`, `改正前民法…`, `旧395条`;
+- it counts or points rather than names: preceded by 前, 次, 同, 本 or 各 (`前2条の罪`);
+- the article is not in the file. For `177条の3つの要件`, when `177_3` does not exist but `177` does,
+  only `177条` is a link;
+- it is on a line containing `📜` and is followed by a caption in parentheses (optionally after 本文,
+  前段, 後段, ただし書, 柱書, N項 or N号) that shares no two consecutive characters with the article's
+  `caption` — it is quoting another statute (`5条本文（過失運転致死傷）` in a 刑法 card);
+- it is inside a link, inline code, a code block or `[[…]]`.
+
+A number that does not resolve stays plain text. Apps never show a link that opens nothing.
+
+### 14.4 Producing the files
+
+The files are generated, not typed. [`tools/fetch_statutes.py`](tools/fetch_statutes.py) (Python 3,
+standard library only) builds them from the e-Gov 法令 API v2:
+
+```console
+$ python3 tools/fetch_statutes.py --out <vault>/data/statutes 民法 刑法 憲法
+```
+
+- It takes the main provisions only, not supplementary provisions (附則).
+- By default it turns kanji numerals into Arabic ones where they count something — `三年以下` becomes
+  `3年以下`, `第一項` becomes `第1項` — and leaves words like `第三者` and `一部` alone, so the text
+  reads like the cards that quote it. `--kanji-numerals keep` keeps the original.
+- `aliases`, `subjects`, `paths` and `divisions` are the owner's to edit; regenerating keeps them.
+  After editing `divisions`, `--reapply` rebuilds `toc` without network access. Each division must
+  cover its parent's range with no gap or overlap, or generation stops.
+- Statutes are amended. Regenerate and commit to follow them; `source.enforced` says which version a
+  file holds.
+
+### 14.5 Writing law cards (guidance)
+
+- Write article numbers in Arabic numerals (`95条1項`), as the generated text does.
+- Name the statute whenever it is not the card's default: `憲法31条` in a card under `刑法/`.
+- Repeat the name for every article of another statute. In `刑事訴訟法199条・210条` under `刑法/`,
+  `210条` has no name before it and resolves to 刑法210条; write `刑事訴訟法199条、刑事訴訟法210条`.
+- When the card must hold the wording, quote it as a blockquote: a `📍` line saying where the article
+  sits, then a `📜` line with the text, separated by an empty `>` line.
+
+  ```markdown
+  > 📍 第2編　罪 › 第5章　公務の執行を妨害する罪（95〜96条の6）
+  >
+  > 📜 **95条1項（公務執行妨害）**：公務員が職務を執行するに当たり、これに対して暴行又は脅迫を加えた者は、3年以下の拘禁刑又は50万円以下の罰金に処する。
+  ```
+
+- Put the article the question asks about on the front; an article first needed for the answer goes
+  on the back.
+- A norm (規範) used by several problems is one card, referenced as `**規範** [[id]]` from each
+  problem card (§9). Fix the norm in that one card.
 
 ---
 

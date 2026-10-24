@@ -14,5 +14,5 @@ above with the command this vault really uses. If there is no linter, say so in 
 ## Working here
 
 - Creating and editing cards is normal work — do it without asking. Deleting one is not.
-- `data/` is never yours to write.
+- `data/` is never yours to write (except `data/statutes/` through `fetch_statutes.py`, SPEC §14).
 - Commit the cards you write; Git history is their backup.
