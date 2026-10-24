@@ -39,6 +39,17 @@ Exit `1` if any card has an error. `lint/anchor-lint.mjs` is **generated** from 
 and lint (so the linter can never read a card differently from the apps); do not edit it by hand.
 Messages are currently in Japanese.
 
+## Statutes (Japanese law, optional)
+
+A law vault can carry statute text in `data/statutes/`; the apps then show the article behind a number
+like `95条1項` when you hover or tap it (SPEC §14). Build the files from e-Gov with Python 3, no install:
+
+```console
+$ python3 tools/fetch_statutes.py --out path/to/your/vault/data/statutes 民法 刑法 憲法
+```
+
+`tools/fetch_statutes.py` is copied from the apps' repository; do not edit it here.
+
 ## Plugin for Claude Code (optional)
 
 ```
@@ -59,8 +70,9 @@ to read `SPEC.md` before writing.
 | [`SPEC.md`](SPEC.md) | The specification. Single source of truth. |
 | [`llms.txt`](llms.txt) | Index for AI readers (links only). |
 | [`lint/`](lint/) | Reference linter (generated). |
+| [`tools/`](tools/) | `fetch_statutes.py`: builds statute files from e-Gov (copied). |
 | [`templates/`](templates/) | `AGENTS.md`, `CLAUDE.md`, `.gitignore` for a vault root. |
-| [`examples/`](examples/) | Lint-clean cards in four subjects. |
+| [`examples/`](examples/) | Lint-clean cards in four subjects, and a statute file for the law cards. |
 | [`skills/`](skills/), [`commands/`](commands/), [`hooks/`](hooks/) | The Claude Code plugin. |
 
 ## License
