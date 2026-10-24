@@ -1,7 +1,7 @@
 # Anchor Card Format v2 — Specification
 
-Status: **v2, in use.** Last changed 2026-10-24: references in the note are inlined (§9), card links
-(§8.3), statute files (§14). This document is the **single source of truth** for the card format. Every
+Status: **v2, in use.** Last changed 2026-10-25: images (§8.3, §10, §12). Before that, 2026-10-24:
+references in the note are inlined (§9), card links (§8.3), statute files (§14). This document is the **single source of truth** for the card format. Every
 other document — the README, `llms.txt`, the vault templates, the plugin skill and commands, any
 app's own notes, any vault's `CLAUDE.md` / `AGENTS.md` — may *point* here but MUST NOT restate the
 rules. Where anything disagrees with this file, this file is right.
@@ -188,6 +188,24 @@ A Markdown link whose target is a relative path to another card file (`[0511b](.
 opens that card. Apps MAY show it on top of the current card, so that closing it returns to the same
 card in the same state (revealed or not).
 
+#### Images
+
+A line that, trimmed, is **only** an image — `![alt](path)`, optionally with a title
+(`![alt](path "title")`) — is an image block, on any face. Apps that show images show it there, scaled
+down to the width of the card and never up; apps that do not show images show the alt text.
+
+- `path` is relative to the card file, like a card link, and MUST stay inside the vault. A path that
+  leaves the vault, passes through a directory whose name starts with `_` or `.`, or is a URL
+  (`https://…`) is not resolved: apps never fetch images from outside the vault, so a card renders the
+  same offline.
+- Formats: **PNG, JPEG and WebP** (GIF shows its first frame). Other formats are not shown.
+- Size: an image file larger than **1 MiB** (1,048,576 bytes) is not loaded. Apps show the alt text
+  and SHOULD say the image is too large.
+- Whenever the image cannot be shown — missing, unsupported, outside the vault, too large — apps show
+  the alt text. So **write alt text that carries the point of the picture.**
+- An image inside a sentence is not a block; apps show its alt text in the line.
+- Apps download only the images that cards point at, not every image in the vault.
+
 ---
 
 ## 9. References — `[[id]]`
@@ -249,7 +267,8 @@ The scheduling state of a card is recomputed from its log lines; it is not store
 under `data/` other than `data/statutes/`. Log lines for deleted cards stay.
 
 Apps also **read**, and never write, `data/statutes/*.json` — statute text for the optional statute
-lookup (§14). Those files belong to the vault's owner and the tools they run.
+lookup (§14) — and the image files that cards point at (§8.3). Those files belong to the vault's owner
+and the tools they run.
 
 ---
 
@@ -291,6 +310,13 @@ card has history, or by moving shared text into an `ask: false` card — not by 
 - Put the source in the note. A fact you cannot trace cannot be checked.
 - Write the content in the language you study in. Only the keys and markers are English.
 - Changing *what a card asks* is a new card: new `id`, and the old file is deleted **by a person**.
+- **Images (§8.3)**: put the file next to the card, or in an `img/` directory beside it, and link it
+  with a relative path. Keep files small — every image is synced to every device. Diagrams are best as
+  **PNG reduced to a palette and optimized** (e.g. `pngquant --quality 65-90` then `oxipng -o 4`; a
+  relationship chart then lands around 20–200 KB). Photos go in as **WebP or JPEG** (quality ~80,
+  longest side ≤ 1600 px). Aim for under 200 KB; 1 MiB is the hard limit. Draw the picture for the
+  card — a chart of the facts of a case, not a page scan — and keep text in the image short, since it
+  cannot be searched or copied.
 
 ---
 
